@@ -1,13 +1,18 @@
-catalogMode: prefer
-ignoreWorkspaceRootCheck: true
-shellEmulator: true
-trustPolicy: no-downgrade
-
 packages:
   - playground
   - docs
   - packages/*
   - examples/*
+
+catalog:
+  '@types/cors': ^2.8.19
+  '@types/express': ^5.0.6
+  cors: ^2.8.6
+  express: ^5.2.1
+  dotenv: ^17.2.3
+  openai: ^6.24.0
+
+catalogMode: prefer
 
 catalogs:
   cli:
@@ -31,6 +36,13 @@ catalogs:
     yaml: ^2.8.2
   types:
     '@types/node': ^25.0.1
+
+ignoreWorkspaceRootCheck: true
+
 onlyBuiltDependencies:
   - esbuild
   - simple-git-hooks
+
+shellEmulator: true
+
+trustPolicy: no-downgrade
