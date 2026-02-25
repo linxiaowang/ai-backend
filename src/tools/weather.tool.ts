@@ -17,7 +17,8 @@ export class WeatherTool implements Tool {
   }
 
   async execute(args: any) {
+    console.log('Weather args', args)
     const { city } = args
-    return `${city} today is 25°C and sunny.`
+    return `${city} 今天 0 度，有点冷.`
   }
 }
