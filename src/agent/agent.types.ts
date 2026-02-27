@@ -7,3 +7,33 @@ export interface CompletedToolCall {
     arguments: string
   }
 }
+
+export type AgentEvent
+  = | {
+    type: 'thought'
+    content: string
+  }
+  | {
+    type: 'tool_call'
+    name: string
+    args: any
+  }
+  | {
+    type: 'tool_result'
+    content: any
+  }
+  | {
+    type: 'final'
+    content: string
+  }
+
+export type LLMDelta
+  = | { type: 'content', text: string }
+    | {
+      type: 'tool_call_delta'
+      index: number
+      id?: string
+      name?: string
+      arguments?: string
+    }
+    | { type: 'finish', reason: string | null }

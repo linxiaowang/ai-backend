@@ -1,3 +1,4 @@
+import type { AgentEvent } from '../agent/agent.types'
 import { run as agentRun } from '../agent/agent'
 import { SessionManager } from '../sessions/session.manager'
 
@@ -5,7 +6,7 @@ export class ChatService {
   static async handleChat(
     sessionId: string,
     userInput: string,
-    onChunk: (text: string) => void,
+    onEvent: (data: AgentEvent) => void,
   ) {
     SessionManager.append(sessionId, {
       id: crypto.randomUUID(),
@@ -17,9 +18,15 @@ export class ChatService {
     SessionManager.trim(sessionId)
 
     const session = SessionManager.get(sessionId)
+    const AGENT_SYSTEM_PROMPT = `
+You are a helpful assistant.
 
+When you need to use a tool, call the tool.
+Otherwise, directly answer the user.
+Do not output your reasoning.
+    `
     const modelMessages = [
-      { role: 'system', content: 'You are helpful assistant.' },
+      { role: 'system', content: AGENT_SYSTEM_PROMPT },
       ...session.messages.map(m => ({
         role: m.role,
         content: m.content,
@@ -30,7 +37,7 @@ export class ChatService {
 
     await agentRun(modelMessages, (chunk) => {
       assistantContent += chunk
-      onChunk(chunk)
+      onEvent(chunk)
     })
 
     SessionManager.append(sessionId, {

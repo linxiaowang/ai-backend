@@ -1,8 +1,10 @@
 import type { ChatCompletionTool } from 'openai/resources'
+import { BeautyTool } from './beauty.tool'
 import { WeatherTool } from './weather.tool'
 
 const tools = [
   new WeatherTool(),
+  new BeautyTool(),
 ]
 
 export function getToolDefinitions(): ChatCompletionTool[] {

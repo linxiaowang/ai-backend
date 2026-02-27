@@ -1,3 +1,4 @@
+import type { AgentEvent } from './agent.types'
 import { ModelFactory } from '../models/model.factory'
 import { getToolDefinitions } from '../tools/tool.registry'
 import { runLoop } from './agent.loop'
@@ -7,8 +8,8 @@ import { runLoop } from './agent.loop'
  */
 export async function run(
   messages: any[],
-  onChunk: (text: string) => void,
+  onEvent: (data: AgentEvent) => void,
 ): Promise<void> {
   const provider = ModelFactory.createDefaultProvider()
-  await runLoop(provider, messages, getToolDefinitions, onChunk)
+  await runLoop(provider, messages, getToolDefinitions, onEvent)
 }

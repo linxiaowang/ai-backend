@@ -32,9 +32,9 @@ export class OpenAIProvider implements LLMProvider {
       const choice = chunk.choices[0]
       if (!choice)
         continue
-
+      console.log('chunk', JSON.stringify(chunk, null, 2))
       const delta = choice.delta
-      console.log('delta', JSON.stringify(delta, null, 2))
+      // console.log('delta', JSON.stringify(delta, null, 2))
 
       yield {
         delta: {

@@ -18,7 +18,8 @@ export async function chatHandler(req: Request, res: Response) {
       sessionId,
       message,
       (chunk) => {
-        res.write(`data: ${chunk}\n\n`)
+        console.log('chunk', chunk)
+        res.write(`data: ${JSON.stringify(chunk)}\n\n`)
       },
     )
 
