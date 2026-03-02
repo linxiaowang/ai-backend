@@ -23,8 +23,18 @@ export type AgentEvent
     content: any
   }
   | {
-    type: 'final'
+    type: 'text'
     content: string
+  }
+  | {
+    type: 'session_created'
+    sessionId: string
+    sessionName: string
+  }
+  | {
+    type: 'session_title_updated'
+    sessionId: string
+    sessionName: string
   }
 
 export type LLMDelta

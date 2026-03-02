@@ -2,10 +2,10 @@ import type { Request, Response } from 'express'
 import { ChatService } from '../services/chat.service'
 
 export async function chatHandler(req: Request, res: Response) {
-  const { sessionId, message } = req.body
+  const { sessionId, message, userId } = req.body
 
-  if (!sessionId || typeof sessionId !== 'string' || !message || typeof message !== 'string') {
-    res.status(400).json({ error: 'Invalid sessionId or message' })
+  if (!userId || typeof userId !== 'string' || !message || typeof message !== 'string') {
+    res.status(400).json({ code: 'INVALID_PARAMS', message: 'Invalid userId or message' })
     return
   }
 
@@ -16,6 +16,7 @@ export async function chatHandler(req: Request, res: Response) {
   try {
     await ChatService.handleChat(
       sessionId,
+      userId,
       message,
       (chunk) => {
         console.log('chunk', chunk)
@@ -27,10 +28,9 @@ export async function chatHandler(req: Request, res: Response) {
     res.end()
   }
   catch (error) {
-    // 简单错误处理，避免中间抛错导致连接挂死
-
     console.error(error)
-    res.write('data: [ERROR]\n\n')
+    const message = error instanceof Error ? error.message : '服务异常'
+    res.write(`data: ${JSON.stringify({ type: 'error', message })}\n\n`)
     res.end()
   }
 }

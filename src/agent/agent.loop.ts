@@ -9,7 +9,7 @@ const MAX_TOOL_ROUNDS = 5
 export type GetToolDefinitions = () => any[]
 
 type StepResult
-  = | { type: 'final', content: string }
+  = | { type: 'text', content: string }
     | { type: 'tool', toolCalls: CompletedToolCall[] }
 
 async function runOneStep(
@@ -35,7 +35,7 @@ async function runOneStep(
         case 'content':
           assistantContent += event.text
           onEvent({
-            type: 'final',
+            type: 'text',
             content: event.text, // 纯流式输出
           })
           break
@@ -69,7 +69,7 @@ async function runOneStep(
   }
 
   return {
-    type: 'final',
+    type: 'text',
     content: assistantContent,
   }
 }
@@ -87,7 +87,7 @@ export async function runLoop(
     round++
     const stepResult = await runOneStep(provider, currentMessages, getToolDefinitions, onEvent)
     // 🟢 情况 1：模型给出最终答案
-    if (stepResult.type === 'final') {
+    if (stepResult.type === 'text') {
       if (stepResult.content) {
         currentMessages.push({
           role: 'assistant',
@@ -152,7 +152,7 @@ export async function runLoop(
 
       if (c.delta?.content) {
         finalContent += c.delta.content
-        onEvent({ type: 'final', content: finalContent })
+        onEvent({ type: 'text', content: finalContent })
       }
     }
 
